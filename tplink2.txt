@@ -1,2 +1,0 @@
-https://docs.python.org/3.3/library/fileinput.html
-https://www.google.com/search?q=set+intersection+python&oq=set+inter&aqs=chrome.2.69i57j0l5.2551j0j9&sourceid=chrome&ie=UTF-8
