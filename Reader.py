@@ -1,23 +1,32 @@
 import fileinput
 import re
 
-
-def parse_file(path):
-        regex = re.compile('[^a-zA-Z]')
-
-        doc_id = path.split('\\')[-1]
-
-        def read_file(path):
-            with open(path, 'r') as my_file:
-                return my_file.read()
-
-        return sorted(set((regex.sub('', letter.lower()), doc_id) for (index, letter) in enumerate(read_file(path).split())))
+regex = re.compile('[^a-zA-Z]')
 
 
-def test_func():
-    with fileinput.input(files=('C:\\Users\\micka\\tplink.txt', 'C:\\Users\\micka\\tplink2.txt')) as my_file:
-        pass
+def create_dictionary(*args):
+    result_dict = {}
+
+    def read_file():
+
+        result_set = set()
+
+        with fileinput.input(files=args[0]) as my_file:
+            for line in my_file:
+                for word in line.split():
+                    result_set.add((regex.sub('', word.lower()), my_file.filename()))
+        return sorted(result_set)
+
+    set_of_tuples = read_file()
+
+    for k, v in set_of_tuples:
+        if k not in result_dict:
+            result_dict[k] = [v]
+        else:
+            result_dict[k].append(v)
+
+    return result_dict
 
 
 if __name__ == '__main__':
-    test_func()
+    print(create_dictionary(('alice29.txt', 'asyoulik.txt', 'lcet10.txt', 'plrabn12.txt')))
