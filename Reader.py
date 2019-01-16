@@ -1,3 +1,4 @@
+import fileinput
 import re
 
 
@@ -13,7 +14,10 @@ def parse_file(path):
         return sorted(set((regex.sub('', letter.lower()), doc_id) for (index, letter) in enumerate(read_file(path).split())))
 
 
-if __name__ == '__main__':
-    test = parse_file('C:\\Users\\micka\\tplink.txt')
+def test_func():
+    with fileinput.input(files=('C:\\Users\\micka\\tplink.txt', 'C:\\Users\\micka\\tplink2.txt')) as my_file:
+        pass
 
-    print(test)
+
+if __name__ == '__main__':
+    test_func()
