@@ -1,10 +1,8 @@
 import fileinput
 import re
-<<<<<<< HEAD
+
 import Serialization as save
 
-=======
->>>>>>> 94e1d1fb3b587d6f26b01bf86da532798087b469
 
 regex = re.compile('[^a-zA-Z]')
 
@@ -35,5 +33,6 @@ def create_dictionary(*args):
 
 if __name__ == '__main__':
 
-    print(create_dictionary(('alice29.txt', 'asyoulik.txt', 'lcet10.txt', 'plrabn12.txt')))
+    dict = create_dictionary(('alice29.txt', 'asyoulik.txt', 'lcet10.txt', 'plrabn12.txt'))
+    save.save_to_txt(dict)
 
