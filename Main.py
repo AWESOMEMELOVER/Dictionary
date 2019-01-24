@@ -17,4 +17,4 @@ if __name__ == '__main__':
     serializer = Serializer()
 
     my_dict = parser.create_dictionary()
-    print(len(serializer.read_from_txt()))
+    print(serializer.read_from_txt())
