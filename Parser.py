@@ -1,4 +1,5 @@
 import re
+import itertools
 from Reader import Reader
 
 
@@ -8,7 +9,9 @@ class Parser:
     def __init__(self, my_reader):
         self.reader = my_reader
         self.tuples_of_string = self.reader.get_files()
-        self.my_dictionary = self.create_dictionary()
+        self.my_tuples = self.__fetch_tuples()
+        self.my_filenames = self.reader.my_args[0]
+
     def __fetch_tuples(self):
         result_set = set()
 
@@ -18,7 +21,35 @@ class Parser:
 
         return sorted(result_set)
 
-    def create_dictionary(self):
+    def __get_index_by_filename(self, filename):
+        return self.my_filenames.index(filename)
+
+    def __get_boolean_by_filename(self, filename):
+        result = []
+        list_of_all_files = [item for item in self.my_filenames]
+        for item in list_of_all_files:
+            if item in filename:
+                result.append(1)
+            else:
+                result.append(0)
+        return result
+
+    def create_inverted_index(self):
+        result_dict = {}
+
+        for k, v in self.my_tuples:
+            if k not in result_dict:
+                result_dict[k] = [self.__get_index_by_filename(v)]
+            else:
+                result_dict[k].append(self.__get_index_by_filename(v))
+        return result_dict
+
+    def create_incident_matrix(self):
+        it = itertools.groupby(self.my_tuples, lambda x: x[0])
+        for key, subiter in it:
+            yield key, sum(item[1] for item in subiter)
+
+    """    def create_dictionary(self):
         result_dict = {}
         set_of_tuples = self.__fetch_tuples()
 
@@ -48,6 +79,7 @@ class Parser:
             copied_dictionary[key] = convert_list_to_matrix(copied_dictionary[key])
 
         return copied_dictionary
+"""
 
 
 if __name__ == '__main__':
@@ -63,7 +95,7 @@ if __name__ == '__main__':
          'trash\\test3.docx')
     )
     parser = Parser(reader)
-    print(parser.create_incident_matrix())
+    print(list(parser.create_incident_matrix()))
 
 
 
