@@ -21,65 +21,25 @@ class Parser:
 
         return sorted(result_set)
 
-    def __get_index_by_filename(self, filename):
-        return self.my_filenames.index(filename)
-
-    def __get_boolean_by_filename(self, filename):
-        result = []
-        list_of_all_files = [item for item in self.my_filenames]
-        for item in list_of_all_files:
-            if item in filename:
-                result.append(1)
-            else:
-                result.append(0)
-        return result
-
     def create_inverted_index(self):
         result_dict = {}
 
         for k, v in self.my_tuples:
             if k not in result_dict:
-                result_dict[k] = [self.__get_index_by_filename(v)]
+                result_dict[k] = [self.my_filenames.index(v)]
             else:
-                result_dict[k].append(self.__get_index_by_filename(v))
+                result_dict[k].append(self.my_filenames.index(v))
         return result_dict
 
     def create_incident_matrix(self):
+        result_dict = {}
+
         it = itertools.groupby(self.my_tuples, lambda x: x[0])
         for key, subiter in it:
-            yield key, sum(item[1] for item in subiter)
-
-    """    def create_dictionary(self):
-        result_dict = {}
-        set_of_tuples = self.__fetch_tuples()
-
-        for k, v in set_of_tuples:
-            if k not in result_dict:
-                result_dict[k] = [v]
-            else:
-                result_dict[k].append(v)
+            # key, [item for item in subiter[1]]
+            list_of_present_files = [item[1] for item in subiter]
+            result_dict[key] = [1 if element in list_of_present_files else 0 for element in self.my_filenames]
         return result_dict
-
-    def create_incident_matrix(self):
-
-        copied_dictionary = self.my_dictionary.copy()
-
-        list_of_all_files = [item for item in reader.my_args[0]]
-
-        def convert_list_to_matrix(list_of_presents_files):
-            result = []
-            for item in list_of_all_files:
-                if item in list_of_presents_files:
-                    result.append(1)
-                else:
-                    result.append(0)
-            return result
-
-        for key in copied_dictionary:
-            copied_dictionary[key] = convert_list_to_matrix(copied_dictionary[key])
-
-        return copied_dictionary
-"""
 
 
 if __name__ == '__main__':
@@ -95,7 +55,7 @@ if __name__ == '__main__':
          'trash\\test3.docx')
     )
     parser = Parser(reader)
-    print(list(parser.create_incident_matrix()))
+    print(parser.create_incident_matrix())
 
 
 
